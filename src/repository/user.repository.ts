@@ -17,4 +17,14 @@ async function createNewUser(user: IUser){
   return createUser;
 };
 
-export { createNewUser };
+async function selectAllUsers(){
+  const selectUsers = await prisma.user.findMany();
+
+  if(!selectUsers) {
+    return null;
+  }
+
+  return selectUsers;
+};
+
+export { createNewUser, selectAllUsers };
