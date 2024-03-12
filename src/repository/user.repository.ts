@@ -42,6 +42,18 @@ async function updateUser(idUser: string, user: IUser){
   if(!updateUser) return null
 
   return updatedUser;
-}
+};
 
-export { createNewUser, selectAllUsers, updateUser };
+async function deleteUser(idUser: string){
+  const deletedUser = await prisma.user.delete({
+    where: {
+      id: idUser
+    }
+  });
+
+  if (!deletedUser) return null;
+
+  return deletedUser;
+};
+
+export { createNewUser, selectAllUsers, updateUser, deleteUser };

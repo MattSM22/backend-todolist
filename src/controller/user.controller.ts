@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createNewUser, selectAllUsers, updateUser } from "../repository/user.repository";
+import { createNewUser, deleteUser, selectAllUsers, updateUser } from "../repository/user.repository";
 import { IUser } from "../types/user.types";
 
 async function postNewUser(req: Request, res: Response){
@@ -30,9 +30,9 @@ async function getAllUsers(req: Request, res: Response) {
       list: responseDatabase
     });
   } catch (err: any) {
-    return res.status(409).send({ error: err.name })
+    return res.status(409).send({ error: err.name });
   }
-}
+};
 
 async function alterUser(req: Request, res: Response){
   const body: IUser = req.body;
@@ -50,6 +50,23 @@ async function alterUser(req: Request, res: Response){
   } catch (err: any) {
     return res.status(409).send({ message: err.name });
   }
-}
+};
 
-export { postNewUser, getAllUsers, alterUser };
+async function removeUser(req: Request, res: Response){
+  const idUser: string = req.params.id;
+
+  try {
+    const responseDatabase = await deleteUser(idUser);
+
+    if(!responseDatabase) return res.status(406).send({ message: "Ocorreu um erro durante a exclusão deste usuário" });
+
+    return res.status(200).json({
+      message: "Usuário excluido",
+      user: responseDatabase
+    });
+  } catch (err: any) {
+    return res.status(409).send({ message: err.name });
+  }
+};
+
+export { postNewUser, getAllUsers, alterUser, removeUser };
