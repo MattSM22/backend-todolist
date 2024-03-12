@@ -27,4 +27,21 @@ async function selectAllUsers(){
   return selectUsers;
 };
 
-export { createNewUser, selectAllUsers };
+async function updateUser(idUser: string, user: IUser){
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: idUser
+    },
+    data: {
+        name: user.name,
+        email: user.email,
+        password: user.password
+      }
+  });
+
+  if(!updateUser) return null
+
+  return updatedUser;
+}
+
+export { createNewUser, selectAllUsers, updateUser };

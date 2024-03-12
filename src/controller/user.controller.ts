@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createNewUser, selectAllUsers } from "../repository/user.repository";
+import { createNewUser, selectAllUsers, updateUser } from "../repository/user.repository";
 import { IUser } from "../types/user.types";
 
 async function postNewUser(req: Request, res: Response){
@@ -34,4 +34,22 @@ async function getAllUsers(req: Request, res: Response) {
   }
 }
 
-export { postNewUser, getAllUsers };
+async function alterUser(req: Request, res: Response){
+  const body: IUser = req.body;
+  const idUser: string = req.params.id;
+
+  try {
+    const responseDatabase = await updateUser(idUser, body);
+
+    if (!responseDatabase) return res.status(406).send({ message: "Ocorreu um erro durante a atualização deste usuário" });
+    
+    return res.status(200).json({
+      message: "Usuário atualizado",
+      user: responseDatabase
+    });
+  } catch (err: any) {
+    return res.status(409).send({ message: err.name });
+  }
+}
+
+export { postNewUser, getAllUsers, alterUser };
