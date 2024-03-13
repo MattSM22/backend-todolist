@@ -21,4 +21,14 @@ async function createNewTask(task: ITask){
   return createTask;
 };
 
-export { createNewTask };
+async function selectAllTasks(){
+  const listTask = await prisma.task.findMany();
+
+  if(!listTask) {
+    return null;
+  }
+
+  return listTask;
+}; 
+
+export { createNewTask, selectAllTasks };
