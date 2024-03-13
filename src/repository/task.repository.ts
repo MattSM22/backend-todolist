@@ -44,4 +44,16 @@ async function updateTask(idTask: string, task: ITask){
   return updatedTask;
 };
 
-export { createNewTask, selectAllTasks, updateTask };
+async function deleteTask(idTask: string){
+  const deletedTask = await prisma.task.delete({
+    where: {
+      id: idTask
+    }
+  });
+
+  if (!deletedTask) return null;
+
+  return deletedTask;
+}
+
+export { createNewTask, selectAllTasks, updateTask, deleteTask };

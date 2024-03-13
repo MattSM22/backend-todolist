@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createNewTask, selectAllTasks, updateTask } from "../repository/task.repository";
+import { createNewTask, deleteTask, selectAllTasks, updateTask } from "../repository/task.repository";
 import { ITask } from "../types/task.types";
 
 async function postNewTask(req: Request, res: Response) {
@@ -54,4 +54,21 @@ async function alterTask(req: Request, res: Response){
   }
 };
 
-export { postNewTask, getAllTasks, alterTask };
+async function removeTask(req: Request, res: Response){
+  const idTask: string = req.params.id;
+
+  try {
+    const responseDatabase = await deleteTask(idTask);
+
+    if (!responseDatabase) return res.status(406).send({ message: "Não foi possível remover essa task" });
+
+    return res.status(200).json({
+      message: "Task removida!",
+      task: responseDatabase
+    });
+  } catch (err: any) {
+    return res.status(409).send({ error: err.name });
+  }
+};
+
+export { postNewTask, getAllTasks, alterTask, removeTask };
