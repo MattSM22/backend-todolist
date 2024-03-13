@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getAllTasks, postNewTask } from "../controller/task.controller";
+import { alterTask, getAllTasks, postNewTask } from "../controller/task.controller";
 
 const TaskRouter = Router();
 
 TaskRouter.post("/create", postNewTask);
-TaskRouter.get("/list", getAllTasks)
+TaskRouter.get("/list", getAllTasks);
+TaskRouter.put("/update/:id", alterTask);
 
 export default TaskRouter;

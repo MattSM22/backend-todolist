@@ -14,9 +14,7 @@ async function createNewTask(task: ITask){
     }
   });
 
-  if (!createTask) {
-    return null;
-  }
+  if (!createTask) return null;
 
   return createTask;
 };
@@ -24,11 +22,26 @@ async function createNewTask(task: ITask){
 async function selectAllTasks(){
   const listTask = await prisma.task.findMany();
 
-  if(!listTask) {
-    return null;
-  }
+  if(!listTask) return null;
 
   return listTask;
 }; 
 
-export { createNewTask, selectAllTasks };
+async function updateTask(idTask: string, task: ITask){
+  const updatedTask = await prisma.task.update({
+    where: {
+      id: idTask
+    },
+    data: {
+      userId: task.idUser,
+      isFinalized: task.isFinalized,
+      content: task.content
+    }
+  });
+
+  if (!updatedTask) return null;
+
+  return updatedTask;
+};
+
+export { createNewTask, selectAllTasks, updateTask };
